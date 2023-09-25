@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import Login from './features/identity/login/login'
+import '../public/css/styles.css'
 
 function App() {
 
   return (
     <div>
-      hiuiii
+      <Login />
     </div>
   )
 }
