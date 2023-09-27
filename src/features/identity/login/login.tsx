@@ -1,6 +1,8 @@
 import logo from "@assets/images/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useActionData, useNavigate, useNavigation, useSubmit } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { httpServis } from "../../../core/httpService";
+import { useEffect } from "react";
 
 type Inputs = {
 	mobile: string;
@@ -8,13 +10,27 @@ type Inputs = {
 };
 
 const Login = () => {
+	const submitForm=useSubmit();
+    const formStatus=useNavigation()
+    const isSubmitSuccessfull=useActionData()
+    const navigate=useNavigate();
+
 	const {
 		register,
 		handleSubmit,
 		watch,
 		formState: { errors },
 	} = useForm<Inputs>();
-	const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+	const onSubmit: SubmitHandler<Inputs> = (data) => {
+		
+        submitForm(data,{method:"POST"})
+	};
+
+	useEffect(()=>{
+        if(!!isSubmitSuccessfull){
+           setTimeout( ()=>navigate('/home'),2000)
+        }
+    },[isSubmitSuccessfull])
 	return (
 		<>
 			<div className="text-center mt-4  flex flex-col justify-center items-center content-center">
@@ -54,9 +70,10 @@ const Login = () => {
 								<span className="error text-red-400 text-xs">{errors.password?.message}</span>
 							</div>
 							<div className="text-center mt-3">
-								<input type="submit" className="btn btn-lg btn-primary bg-blue-600" value="وارد شوید" />
+							<input type="submit" className={`btn btn-lg text-white  ${formStatus.state==='submitting' ? 'bg-blue-300' : 'bg-blue-600'} `} value={formStatus.state==='submitting' ? 'در حال ورود' : 'وارد شوید'} />
 							</div>
 						</form>
+						{(!!isSubmitSuccessfull && formStatus.state!=='submitting') && (<div className="bg-green-600 mt-3 p-2 text-xs text-white text-center">ثبت نام شما با موفقیت انجام شد. به صفحه اول منتقل می‌شوید</div>)}
 					</div>
 				</div>
 			</div>
@@ -65,3 +82,12 @@ const Login = () => {
 };
 
 export default Login;
+
+export async function ActionLogin({request}:any) {
+    console.log(request)
+    const formDat=await request.formData();
+    const data = Object.fromEntries(formDat);
+    const response= await httpServis.post('/Users/login',data);
+    return response?.status===200;
+    
+}
