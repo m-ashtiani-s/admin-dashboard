@@ -3,6 +3,7 @@ import {useEffect} from 'react'
 import { Link, useActionData, useNavigate, useNavigation, useSubmit } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { httpServis } from "../../../core/httpService";
+import { useTranslation } from "react-i18next";
 
 type Inputs = {
 	mobile: string;
@@ -15,6 +16,7 @@ const Register = () => {
     const formStatus=useNavigation()
     const isSubmitSuccessfull=useActionData()
     const navigate=useNavigate();
+	const {t} = useTranslation();
    
 	const {
 		register,
@@ -88,7 +90,7 @@ const Register = () => {
 								<span className="error text-red-400 text-xs">{errors.confirmPassword?.message}</span>
 							</div>
 							<div className="text-center mt-3">
-								<input type="submit" className={`btn btn-lg text-white  ${formStatus.state==='submitting' ? 'bg-blue-300' : 'bg-blue-600'} `} value={formStatus.state==='submitting' ? 'در حال ثبت نام' : 'ثبت نام کنید'} />
+								<input type="submit" className={`btn btn-lg text-white  ${formStatus.state==='submitting' ? 'bg-blue-300' : 'bg-blue-600'} `} value={formStatus.state==='submitting' ? 'در حال ثبت نام' : t('register.register')} />
 							</div>
 						</form>
                         {(!!isSubmitSuccessfull && formStatus.state!=='submitting') && (<div className="bg-green-600 mt-3 p-2 text-xs text-white text-center">ثبت نام شما با موفقیت انجام شد. به صفحه ورود منتقل می‌شوید</div>)}
