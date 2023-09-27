@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import Login from "../features/identity/login/login";
-import Register from "../features/identity/register/register";
+import Login, { ActionLogin } from "../features/identity/login/login";
+import Register, { ActionRegister } from "../features/identity/register/register";
 import IdentityLayout from "../layout/identity-layout/identity-layout";
 
 const router = createBrowserRouter([
@@ -9,11 +9,13 @@ const router = createBrowserRouter([
         children: [
             {
                 path: 'login',
-                Component: Login
+                Component: Login,
+                action:ActionLogin
             },
             {
                 path: 'register',
-                Component: Register
+                Component: Register,
+                action:ActionRegister
             },
 
         ]
