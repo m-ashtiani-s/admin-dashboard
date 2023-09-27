@@ -1,10 +1,15 @@
 import logo from "@assets/images/logo.svg";
 import { Link, Outlet } from "react-router-dom";
+import ChangeLang from "../../components/changeLang/ChangeLang";
 import './identityStyle.css'
 
-const IdentityLayout: any = () => {
+const IdentityLayout= () => {
 	return (
 		<div className="main d-flex justify-content-center w-100">
+			<header className="border-b-2 bg-blue-50">
+				<ChangeLang />
+
+			</header>
 			<main className="content d-flex p-0">
 				<div className="container d-flex flex-column">
 					<div className="row h-100">
