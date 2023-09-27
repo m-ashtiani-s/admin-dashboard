@@ -7,7 +7,7 @@ type Inputs = {
 	password: string;
 };
 
-const Login: any = () => {
+const Login = () => {
 	const {
 		register,
 		handleSubmit,
@@ -15,11 +15,9 @@ const Login: any = () => {
 		formState: { errors },
 	} = useForm<Inputs>();
 	const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-
-	console.log(watch("mobile")); // watch input value by passing the name of i
 	return (
 		<>
-			<div className="text-center mt-4">
+			<div className="text-center mt-4  flex flex-col justify-center items-center content-center">
 				<img src={logo} style={{ height: "100px" }} />
 				<h1 className="h2">پلتفرم آموزش آنلاین</h1>
 				<p className="lead">جهت ورود لازم است از طریق موبایل و رمز عبور خود اقدام کنید</p>
@@ -37,14 +35,26 @@ const Login: any = () => {
 						<form onSubmit={handleSubmit(onSubmit)}>
 							<div className="mb-3">
 								<label className="form-label">موبایل</label>
-								<input className="form-control form-control-lg" {...register("mobile", { required: true })} />
+								<input
+									className={`form-control form-control-lg ${errors.mobile && `is-invalid`}`}
+									{...register("mobile", { required: "شماره موبایل الزامی است", maxLength: 11, minLength: 11 })}
+								/>
+								<span className="error text-red-400 text-xs">{errors.mobile?.message}</span>
+								<span className="error text-red-400 text-xs">
+									{(errors.mobile?.type === "minLength" || errors.mobile?.type === "maxLength") && "عدد وارد شده باید 11 رقمی باشد"}
+								</span>
 							</div>
 							<div className="mb-3">
-								<label className="form-label" {...register("password", { required: true })}>رمز عبور</label>
-								<input className="form-control form-control-lg mb-2" type="password" />
+								<label className="form-label">رمز عبور</label>
+								<input
+									{...register("password", { required: "رمز عبور الزامی است" })}
+									className={`form-control form-control-lg ${errors.password && `is-invalid`}`}
+									type="password"
+								/>
+								<span className="error text-red-400 text-xs">{errors.password?.message}</span>
 							</div>
 							<div className="text-center mt-3">
-								<input type="submit" className="btn btn-lg btn-primary" value='وارد شوید' />
+								<input type="submit" className="btn btn-lg btn-primary bg-blue-600" value="وارد شوید" />
 							</div>
 						</form>
 					</div>

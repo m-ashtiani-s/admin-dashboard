@@ -1,5 +1,6 @@
 import logo from "@assets/images/logo.svg";
 import { Link, Outlet } from "react-router-dom";
+import './identityStyle.css'
 
 const IdentityLayout: any = () => {
 	return (
