@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import usFlag from '../../assets/images/usFlag.svg'
 import iranFlag from '../../assets/images/iranFlag.svg'
+import { useLangContext } from "../../context/langContext/LangContext";
 
 const ChangeLang = () => {
 	const [show, setShow] = useState<boolean>(false);
 	const listRef = useRef<HTMLDivElement | null>(null);
+	const {lang,changeLang}=useLangContext();
 
 	useEffect(() => {
 		// Event handler to check for clicks outside the List component
@@ -34,13 +36,13 @@ const ChangeLang = () => {
 					
                     ref={listRef} onClick={()=>setShow(true)}
 				>
-					<img src={iranFlag} alt="" className="h-full rounded-full" />
+					<img src={lang==='fa' ? iranFlag : usFlag} alt="" className="h-full rounded-full" />
 					
 					
 				</span>
 				<div id="dropdown-states" className={`z-10 absolute top-12 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 ${show ? 'flex' : 'hidden'}`}>
 					<ul className="py-2 text-sm text-gray-700 dark:text-gray-200 w-full" aria-labelledby="states-button">
-						<li>
+						<li onClick={()=>changeLang('en')} >
 							<span
 								className="cursor-pointer inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
 							>
@@ -50,7 +52,7 @@ const ChangeLang = () => {
 								</div>
 							</span>
 						</li>
-						<li>
+						<li onClick={()=>changeLang('fa')}>
 							<span
 								
 								className="cursor-pointer inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white"
