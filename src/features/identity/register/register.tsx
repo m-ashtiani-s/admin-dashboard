@@ -2,7 +2,7 @@ import logo from "@assets/images/logo.svg";
 import { useEffect } from "react";
 import { Link, useActionData, useNavigate, useNavigation, useRouteError, useSubmit } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { httpServis } from "../../../core/httpService";
+import { httpServis } from "@core/httpService";
 import { useTranslation } from "react-i18next";
 
 type Inputs = {
@@ -18,7 +18,6 @@ const Register = () => {
 	const navigate = useNavigate();
 	const routErrors: any = useRouteError();
 	const { t } = useTranslation();
-
 
 	const {
 		register,

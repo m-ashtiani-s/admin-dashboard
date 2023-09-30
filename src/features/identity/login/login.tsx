@@ -1,8 +1,8 @@
 import logo from "@assets/images/logo.svg";
 import { Link, useActionData, useNavigate, useNavigation, useRouteError, useSubmit } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { httpServis } from "../../../core/httpService";
 import { useEffect } from "react";
+import { httpServis } from "@core/httpService";
 
 type Inputs = {
 	mobile: string;
