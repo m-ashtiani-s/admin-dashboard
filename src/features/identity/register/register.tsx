@@ -1,6 +1,6 @@
 import logo from "@assets/images/logo.svg";
-import {useEffect} from 'react'
-import { Link, useActionData, useNavigate, useNavigation, useSubmit } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useActionData, useNavigate, useNavigation, useRouteError, useSubmit } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { httpServis } from "../../../core/httpService";
 import { useTranslation } from "react-i18next";
@@ -12,12 +12,14 @@ type Inputs = {
 };
 
 const Register = () => {
-    const submitForm=useSubmit();
-    const formStatus=useNavigation()
-    const isSubmitSuccessfull=useActionData()
-    const navigate=useNavigate();
-	const {t} = useTranslation();
-   
+	const submitForm = useSubmit();
+	const formStatus = useNavigation();
+	const isSubmitSuccessfull = useActionData();
+	const navigate = useNavigate();
+	const routErrors: any = useRouteError();
+	const { t } = useTranslation();
+
+
 	const {
 		register,
 		handleSubmit,
@@ -25,15 +27,16 @@ const Register = () => {
 		formState: { errors },
 	} = useForm<Inputs>();
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-        const {confirmPassword,...formDa}=data
-        submitForm(formDa,{method:"POST"})
-    };
+		const { confirmPassword, ...formDa } = data;
+		submitForm(formDa, { method: "POST" });
+	};
 	console.log(errors);
-    useEffect(()=>{
-        if(!!isSubmitSuccessfull){
-           setTimeout( ()=>navigate('/login'),2000)
-        }
-    },[isSubmitSuccessfull])
+
+	useEffect(() => {
+		if (!!isSubmitSuccessfull) {
+			setTimeout(() => navigate("/login"), 2000);
+		}
+	}, [isSubmitSuccessfull]);
 	return (
 		<>
 			<div className="text-center mt-4 flex flex-col justify-center items-center content-center">
@@ -90,10 +93,23 @@ const Register = () => {
 								<span className="error text-red-400 text-xs">{errors.confirmPassword?.message}</span>
 							</div>
 							<div className="text-center mt-3">
-								<input type="submit" className={`btn btn-lg text-white  ${formStatus.state==='submitting' ? 'bg-blue-300' : 'bg-blue-600'} `} value={formStatus.state==='submitting' ? 'در حال ثبت نام' : t('register.register')} />
+								<input
+									type="submit"
+									className={`btn btn-lg text-white  ${formStatus.state === "submitting" ? "bg-blue-300" : "bg-blue-600"} `}
+									value={formStatus.state === "submitting" ? "در حال ثبت نام" : t("register.register")}
+								/>
 							</div>
 						</form>
-                        {(!!isSubmitSuccessfull && formStatus.state!=='submitting') && (<div className="bg-green-600 mt-3 p-2 text-xs text-white text-center">ثبت نام شما با موفقیت انجام شد. به صفحه ورود منتقل می‌شوید</div>)}
+						{!!routErrors && (
+							<div className="bg-red-300 text-center py-2 px-2 mt-2 text-gray-600 rounded-sm">
+								{routErrors.response?.data.map((error: any) => error.description)}
+							</div>
+						)}
+						{!!isSubmitSuccessfull && formStatus.state !== "submitting" && (
+							<div className="bg-green-600 mt-3 p-2 text-xs text-white text-center">
+								ثبت نام شما با موفقیت انجام شد. به صفحه ورود منتقل می‌شوید
+							</div>
+						)}
 					</div>
 				</div>
 			</div>
@@ -103,11 +119,10 @@ const Register = () => {
 
 export default Register;
 
-export async function ActionRegister({request}:any) {
-    console.log(request)
-    const formDat=await request.formData();
-    const data = Object.fromEntries(formDat);
-    const response= await httpServis.post('/Users',data);
-    return response?.status===200;
-    
+export async function ActionRegister({ request }: any) {
+	console.log(request);
+	const formDat = await request.formData();
+	const data = Object.fromEntries(formDat);
+	const response = await httpServis.post("/Users", data);
+	return response?.status === 200;
 }

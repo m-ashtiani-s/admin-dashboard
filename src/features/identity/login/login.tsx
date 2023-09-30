@@ -1,5 +1,5 @@
 import logo from "@assets/images/logo.svg";
-import { Link, useActionData, useNavigate, useNavigation, useSubmit } from "react-router-dom";
+import { Link, useActionData, useNavigate, useNavigation, useRouteError, useSubmit } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { httpServis } from "../../../core/httpService";
 import { useEffect } from "react";
@@ -24,6 +24,7 @@ const Login = () => {
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
 		submitForm(data, { method: "POST" });
 	};
+	const routErrors: any = useRouteError();
 
 	useEffect(() => {
 		if (!!isSubmitSuccessfull) {
@@ -31,6 +32,7 @@ const Login = () => {
 			setTimeout(() => navigate("/home"), 2000);
 		}
 	}, [isSubmitSuccessfull]);
+	
 	return (
 		<>
 			<div className="text-center mt-4  flex flex-col justify-center items-center content-center">
@@ -77,6 +79,9 @@ const Login = () => {
 								/>
 							</div>
 						</form>
+						{!!routErrors && (
+							<div className="bg-red-300 text-center py-2 px-2 mt-2 text-gray-600 rounded-sm">{routErrors.response?.data.map((error:any)=>error.description)}</div>
+						)}
 						{!!isSubmitSuccessfull && formStatus.state !== "submitting" && (
 							<div className="bg-green-600 mt-3 p-2 text-xs text-white text-center">
 								ثبت نام شما با موفقیت انجام شد. به صفحه اول منتقل می‌شوید
