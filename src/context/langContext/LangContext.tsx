@@ -5,18 +5,17 @@ import langReducer from "./LangReducers";
 
 export interface langType {
     lang: string;
-    changeLang: (lang: string) => void; // Include the changeLang property in the type
+    changeLang: (lang: string) => void;
 }
 
 const LangContext = createContext<langType | undefined>(undefined);
 const initialState: langType = {
     lang: localStorage.getItem('lang') || 'fa',
-    changeLang: () => {}, // You can provide a default implementation here if needed
+    changeLang: () => {}
 }
 
 const LangProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(langReducer, initialState);
-    // const {i18n}=useTransition()
     const {i18n}=useTranslation()
 
     const changeLang = (lang: string) => {
